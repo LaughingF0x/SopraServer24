@@ -2,42 +2,79 @@ package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class UserGetDTO {
 
-  private Long id;
-  private String name;
-  private String username;
-  private UserStatus status;
+    private Long id;
+    private String name;
+    private String username;
+    private UserStatus status;
+    private String password;
+    private Date creation_date;
+    private Date birthdate;
+    private String token;
 
-  public Long getId() {
-    return id;
-  }
+    public String getToken() {
+        return token;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public UserStatus getStatus() {
-    return status;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public void setStatus(UserStatus status) {
-    this.status = status;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public Date getCreation_date(){
+        return creation_date;
+    }
+    public void setCreation_date(Date creation_date){
+        this.creation_date = creation_date;
+    }
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
 }
