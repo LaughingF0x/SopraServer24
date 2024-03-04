@@ -82,13 +82,8 @@ public class UserService {
         User userByName = userRepository.findByName(userToBeCreated.getName());
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-        if (userByUsername != null && userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(baseErrorMessage, "username and the name", "are"));
-        } else if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
-        } else if (userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
+        if (userByUsername != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username", "is"));
         }
     }
 
@@ -147,7 +142,11 @@ public class UserService {
         if (!updatedUser.getUsername().equals(foundUser.getUsername())){
             checkIfUserExists(updatedUser);
         }
-        foundUser.setBirthdate(updatedUser.getBirthdate());
-        foundUser.setUsername(updatedUser.getUsername());
+        if (updatedUser.getUsername()!=""){
+            foundUser.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getBirthdate()!=null){
+            foundUser.setBirthdate(updatedUser.getBirthdate());
+        }
     }
 }
