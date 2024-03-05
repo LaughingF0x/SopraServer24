@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.rest.dto;
 import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class UserGetDTO {
@@ -12,7 +13,7 @@ public class UserGetDTO {
     private String username;
     private UserStatus status;
     private String password;
-    private Date creation_date;
+    private LocalDateTime creation_date;
     private Date birthdate;
     private String token;
 
@@ -64,10 +65,10 @@ public class UserGetDTO {
         this.password = password;
     }
 
-    public Date getCreation_date(){
+    public LocalDateTime getCreation_date(){
         return creation_date;
     }
-    public void setCreation_date(Date creation_date){
+    public void setCreation_date(LocalDateTime creation_date){
         this.creation_date = creation_date;
     }
     public Date getBirthdate() {

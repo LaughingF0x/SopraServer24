@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -20,7 +21,6 @@ import java.util.Date;
  * the primary key
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "USER")
 public class User implements Serializable {
 
@@ -45,9 +45,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @CreatedDate
+
     @Column(nullable = false)
-    private Date creation_date;
+    private LocalDateTime creation_date;
 
     @Column(nullable = true)
     private Date birthdate;
@@ -107,11 +107,11 @@ public class User implements Serializable {
         return password;
     }
 
-    public void setCreation_date(Date creation_date){
+    public void setCreation_date(LocalDateTime creation_date){
         this.creation_date = creation_date;
     }
 
-    public Date getCreation_date(){
+    public LocalDateTime getCreation_date(){
         return creation_date;
     }
 
