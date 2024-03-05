@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.Date;
 /**
@@ -142,11 +143,15 @@ public class UserService {
         if (!updatedUser.getUsername().equals(foundUser.getUsername())){
             checkIfUserExists(updatedUser);
         }
-        if (updatedUser.getUsername()!=""){
+        if (!Objects.equals(updatedUser.getUsername(), "")){
             foundUser.setUsername(updatedUser.getUsername());
         }
         if (updatedUser.getBirthdate()!=null){
             foundUser.setBirthdate(updatedUser.getBirthdate());
         }
+    }
+    public boolean verifyToken(String token) {
+        User user = userRepository.findByToken(token);
+        return user != null;
     }
 }

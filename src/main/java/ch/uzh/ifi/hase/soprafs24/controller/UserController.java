@@ -1,12 +1,14 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.TokenDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -104,5 +106,15 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id is not a number");
         }
         return idLong;
+    }
+
+    @PostMapping("/verify-token")
+    public ResponseEntity<?> verifyToken(@RequestBody TokenDTO tokenDTO) {
+        boolean isValid = userService.verifyToken(tokenDTO.getToken());
+        if (isValid) {
+            return ResponseEntity.ok().body("Token is valid.");
+        } else {
+            return ResponseEntity.badRequest().body("Token is invalid.");
+        }
     }
 }
