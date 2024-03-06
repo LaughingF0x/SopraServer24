@@ -50,7 +50,7 @@ public class UserControllerTest {
   @MockBean
   private UserService userService;
 
-  @Test
+  @Test //get success
   public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
     // given
     User user = new User();
@@ -74,7 +74,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$[0].username", is(user.getUsername())))
         .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
   }
-  @Test
+  @Test //get fail
   public void getUserNotFound() throws Exception {
     // given
     given(userService.getUser(3L)).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -88,7 +88,7 @@ public class UserControllerTest {
         .andExpect(status().isNotFound());
   }
 
-  @Test
+  @Test //post success
   public void createUser_validInput_userCreated() throws Exception {
     // given
     User user = new User();
@@ -117,7 +117,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.username", is(user.getUsername())))
         .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
   }
-  @Test
+  @Test //post fail
   public void createUser_duplicateInputs_throwsException() throws Exception {
     // given
     User user = new User();
@@ -145,7 +145,7 @@ public class UserControllerTest {
     mockMvc.perform(postRequest)
         .andExpect(status().isConflict());
   }
-  @Test
+  @Test //put success
   public void updateUser_success() throws Exception{
       // given
       User user = new User();
@@ -168,7 +168,7 @@ public class UserControllerTest {
       mockMvc.perform(putRequest)
               .andExpect(status().isNoContent());
   }
-  @Test
+  @Test //put fail
   public void updateUser_fail() throws Exception{
         //given
         User user = new User();
