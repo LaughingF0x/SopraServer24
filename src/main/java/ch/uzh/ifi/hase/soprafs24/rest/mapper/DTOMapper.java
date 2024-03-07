@@ -24,7 +24,7 @@ public interface DTOMapper {
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
     @Mapping(source = "name", target = "name")
-    @Mapping(source = "password", target = "password")
+    //@Mapping(source = "password", target = "password")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "token", target = "token")
     User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
@@ -33,20 +33,11 @@ public interface DTOMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "status", target = "status")
-    @Mapping(source = "password", target = "password")
+    //@Mapping(source = "password", target = "password")
     @Mapping(source = "creation_date", target = "creation_date")
     @Mapping(source = "birthdate",target = "birthdate",dateFormat = "dd-MM-yyyy")
     @Mapping(source = "token", target = "token")
     UserGetDTO convertEntityToUserGetDTO(User user);
-
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "username", target = "username")
-    @Mapping(source = "status", target = "status")
-    @Mapping(source = "birthdate",target = "birthdate")
-    @Mapping(source = "creation_date",target = "creation_date")
-    @Mapping(source = "token", target = "token")
-    UserGetDTO convertEntityToUserDTO(User user);
-
 
     @Mapping(source = "username", target = "username")
     @Mapping(source = "birthdate",target = "birthdate", dateFormat = "dd-MM-yyyy")
