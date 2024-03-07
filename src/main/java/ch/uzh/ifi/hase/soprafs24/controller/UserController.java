@@ -66,8 +66,8 @@ public class UserController {
     public void logOutUser(@PathVariable("userId") Long userid){
         // this function is implemented in the UserService
         userService.logoutUser(userid);
-
     }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -87,7 +87,6 @@ public class UserController {
         Long idLong = convertStringToLong(id);
         assert idLong!=null;
         User foundUser= userService.getUser(idLong);
-        System.out.println("wiewre");
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(foundUser);
     }
     @PutMapping(value = "/users/{id}")
@@ -96,6 +95,7 @@ public class UserController {
     public void updateUser(@RequestBody UserPutDTO userPutDTO, @PathVariable("id") String id){
         Long idLong=convertStringToLong(id);
         User user=DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+        userService.getUser(idLong);
         userService.updateUser(user, idLong);
     }
     private Long convertStringToLong(String id){

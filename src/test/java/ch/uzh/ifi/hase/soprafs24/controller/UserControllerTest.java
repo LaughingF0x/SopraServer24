@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,23 +173,17 @@ public class UserControllerTest {
   }
   @Test //put fail
   public void updateUser_fail() throws Exception{
-        //given
-        User user = new User();
-        user.setId(1L);
-        user.setName("Test User");
-        user.setUsername("testUsername");
-        user.setPassword("secret");
-        user.setStatus(UserStatus.ONLINE);
 
-        UserPutDTO userPutDTO = new UserPutDTO();
-        userPutDTO.setUsername("username2");
-        userPutDTO.setBirthdate(new Date());
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setUsername("username2");
+        userPostDTO.setPassword("password");
 
+        given(userService.getUser(99L)).willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         //when
-        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/users/" + 2)
+        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/users/99")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userPutDTO));
+                .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(putRequest)
@@ -198,7 +193,7 @@ public class UserControllerTest {
    * Helper Method to convert userPostDTO into a JSON string such that the input
    * can be processed
    * Input will look like this: {"name": "Test User", "username": "testUsername"}
-   * 
+   *
    * @param object
    * @return string
    */
