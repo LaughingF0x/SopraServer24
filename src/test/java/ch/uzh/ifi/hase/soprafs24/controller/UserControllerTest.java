@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -87,7 +88,6 @@ public class UserControllerTest {
     mockMvc.perform(getRequest)
         .andExpect(status().isNotFound());
   }
-
   @Test //post success
   public void createUser_validInput_userCreated() throws Exception {
     // given
@@ -102,7 +102,7 @@ public class UserControllerTest {
     userPostDTO.setPassword("Test User");
     userPostDTO.setUsername("testUsername");
 
-    given(userService.createUser(Mockito.any())).willReturn(user);
+    given(userService.createUser(any())).willReturn(user);
 
     // when/then -> do the request + validate the result
     MockHttpServletRequestBuilder postRequest = post("/users")
@@ -119,31 +119,33 @@ public class UserControllerTest {
   }
   @Test //post fail
   public void createUser_duplicateInputs_throwsException() throws Exception {
-    // given
-    User user = new User();
-    user.setId(1L);
-    user.setName("Test User");
-    user.setUsername("testUsername");
-    user.setPassword("TestPassword");
-    user.setToken("1");
-    user.setStatus(UserStatus.OFFLINE);
-    user.setCreation_date(LocalDateTime.now());
 
-    UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setPassword("Test password");
-    userPostDTO.setUsername(user.getUsername());
+      User user = new User();
+      user.setId(1L);
+      user.setName("Test User");
+      user.setUsername("testUsername");
+      user.setToken("1");
+      user.setStatus(UserStatus.OFFLINE);
+      // Mocking an existing user with the same username as the one being created
+      given(userService.getUser(1L)).willReturn(new User());
 
+      // Creating a UserPostDTO with the same username
+      UserPostDTO userPostDTO = new UserPostDTO();
+      userPostDTO.setPassword("Test password");
+      userPostDTO.setUsername("testUsername");
+      userPostDTO.setName("Test Name");
 
-    given(userService.createUser(DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO))).willThrow(new ResponseStatusException(HttpStatus.CONFLICT));
+      // Mocking the userService to throw a Conflict exception when attempting to create a user
+      given(userService.createUser(any())).willThrow(new ResponseStatusException(HttpStatus.CONFLICT));
 
-    // when/then -> do the request + validate the result
-    MockHttpServletRequestBuilder postRequest = post("/users")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(userPostDTO));
+      // Constructing the request
+      MockHttpServletRequestBuilder postRequest = post("/users")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(asJsonString(userPostDTO));
 
-    // then
-    mockMvc.perform(postRequest)
-        .andExpect(status().isConflict());
+      // Verifying that the request returns a conflict status
+      mockMvc.perform(postRequest)
+              .andExpect(status().isConflict());
   }
   @Test //put success
   public void updateUser_success() throws Exception{
